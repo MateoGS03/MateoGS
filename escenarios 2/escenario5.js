@@ -4,6 +4,7 @@ scene.background = new THREE.Color(0x022B62)
 /*scene.fog = new THREE.Fog( 0xffffff, 3, 5);*/
 
 
+
 //fondo
 var loader = new THREE.TextureLoader();
 loader.load("../img/espacio.jpg", function(texture){
@@ -110,18 +111,44 @@ scene.add( bola1 );
 bola1.position.x = -4
 
 
+
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+scene.add( directionalLight );
+
+
 //controles
-var control = new THREE.OrbitControls( camera, renderer.domElement );
+/* var control = new THREE.OrbitControls( camera, renderer.domElement );
 control.minDistance = 2;
 control.maxDistance = 12;
 
 camera.position.z = 5;
-
-
+ */
+ 
 
 
 //drag
-/*const controls = new THREE.DragControls( [cube, line], camera, renderer.domElement );*/
+const controls = new THREE.DragControls( [cube1, line, bola1, line4, capsula, line3, cilindro1, line2 ], camera, renderer.domElement );
+camera.position.z = 5;
+
+
+ 
+//hover
+ controls.addEventListener('hoveron', function(events){
+    events.object.material.wireframe = true;
+    events.object.scale.y *= 2
+})
+
+controls.addEventListener('hoveroff', function(events){
+    events.object.material.wireframe = false;
+    events.object.scale.y /= 2
+})
+
+
+const flyControls = new THREE.FlyControls(camera, renderer.domElement)
+flyControls.movementSpeed = 0.1;
+flyControls.rollSpeed = 0.01;
+flyControls.autoForward = false;
+flyControls.dragToLock = false;
 
 
 
@@ -146,6 +173,7 @@ function animate(){
     line4.position.x = -4
     line3.position.x = 3
     line2.position.x = 5
+    flyControls.update(0.5);
     
 	renderer.render( scene, camera );
 }
